@@ -1,9 +1,6 @@
 package com.alura.desafio.principal;
 
-import com.alura.desafio.model.Autor;
-import com.alura.desafio.model.Datos;
-import com.alura.desafio.model.DatosLibros;
-import com.alura.desafio.model.Libro;
+import com.alura.desafio.model.*;
 import com.alura.desafio.repository.AutorRepository;
 import com.alura.desafio.repository.LibroRepository;
 import com.alura.desafio.service.ConsumoAPI;
@@ -26,6 +23,8 @@ public class Principal {
 
     private List<Libro> libros;
     private List<Autor> autores;
+    private List<Autor> autoresVivos;
+    private  List<Libro> librosPorIdioma;
 
     public Principal(AutorRepository repositoryAutor, LibroRepository repositoryLibro) {
         this.repositoryAutor=repositoryAutor;
@@ -62,8 +61,10 @@ public class Principal {
                     listarAutores();
                     break;
                 case 4:
+                    listarAutoresVivos();
                     break;
                 case 5:
+                    listarLibrosPorIdioma();
                     break;
                 default:
                     System.out.println("Opción no válida, el número que escogió no está dentro del menú");
@@ -150,6 +151,47 @@ public class Principal {
                     .sorted(Comparator.comparing(Autor::getNombre))
                     .forEach(System.out::println);
         }
+
+    }
+
+    private void listarAutoresVivos() {
+        System.out.println("\n****** Lista de autores vivos por año  ******\n");
+        System.out.println("Ingrese el año en el que desea saber los autores vivos: ");
+        var year = scanner.nextInt();
+        autoresVivos = repositoryAutor.buscarAutoresPorYear(year);
+        System.out.println("Los Autores registrados vivos en el año " + year + " son los siguientes: ");
+        autoresVivos.forEach(a -> System.out.println("\n" + a.toString()));
+
+
+        System.out.println("\n******************************************");
+    }
+
+    private void listarLibrosPorIdioma() {
+        System.out.println("\n****** Lista de Libros por Idioma  ******\n");
+        System.out.println(
+                """
+                Idiomas disponibles:  
+                    es - Español,  de - Alemán,     en - Inglés
+                    fr - Francés,  pt - Portugués,  it - Italiano
+               """
+        );
+        System.out.println("Ingrese el idioma que desea buscar");
+        var idiomaBuscado = scanner.nextLine();
+
+        try {
+
+            librosPorIdioma = repositoryLibro.findByIdiomas(Idioma.fromString(idiomaBuscado));
+            if (!librosPorIdioma.isEmpty()) {
+                System.out.println("Libros registrados publicados en el lenguaje:  " + Idioma.fromString(idiomaBuscado));
+                librosPorIdioma.forEach(l -> System.out.println("\n" + l.toString()));
+            } else {
+                System.out.println("No se han encontrado libros en ese idioma.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
+
+
         System.out.println("\n******************************************");
     }
 

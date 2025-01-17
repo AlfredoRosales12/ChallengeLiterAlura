@@ -10,22 +10,16 @@ El objetivo de este desafío es desarrollar un Catálogo de Libros que ofrezca i
 Los libros se buscarán a través de una API (gutendex). 
 
 
-## :pencil: Características
-
-- **Encriptación de Texto:** Convierte el texto introducido en un formato encriptado utilizando un conjunto específico de reglas.
-- **Desencriptación de Texto:** Permite revertir el texto encriptado a su formato original usando las mismas reglas.
-- **Interfaz de Usuario Sencilla:** Diseñada con CSS para ofrecer una experiencia de usuario clara y accesible.
-- **Compatibilidad con Navegadores:** Funciona en todos los navegadores modernos.
-
-## Interacciones posibles con el catálogo
+## :pencil: Interacciones posibles con el catálogo
 
 Algunas de las posibles interacciones que se podrán realizar en el catálogo de libros son:
 
-1. **Buscar un libro por título.**
-2. **Buscar libros por autor.**
-3. **Listar todos los libros disponibles.**
-4. **Consultar un libro específico.**
-5. **Filtrar libros por género o año de publicación.**
+1. **Buscar y almacenar un libro por título.**
+2. **Listar todos los libros disponibles y todos los autores.**
+3. **Consultar un libro específico.**
+4. **Filtrar libros por idioma.**
+5. **Filtrar autores por año.**
+
 
 ---
 ## Tecnologías utilizadas
@@ -128,7 +122,7 @@ Las observaciones, contribuciones,etc.  son bienvenidas. Si encuentras algún er
 
 Este proyecto está bajo la licencia OpenSource, Creado por Alfredo Rosales [@AlfredoRosales12](https://github.com/AlfredoRosales12)
 
-¡Diviértete encriptando!
+¡Diviértete con LiterAlura!
 
 ## :iphone: Contact
 

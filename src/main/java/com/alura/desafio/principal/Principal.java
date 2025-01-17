@@ -6,10 +6,7 @@ import com.alura.desafio.repository.LibroRepository;
 import com.alura.desafio.service.ConsumoAPI;
 import com.alura.desafio.service.ConvierteDatos;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Principal {
@@ -38,13 +35,14 @@ public class Principal {
 //        System.out.println("datos:" +datos);
 
         while(true){
+            System.out.println("\n\n***********************************************************");
             System.out.println("Elija una opción colocando el número que desea");
-            System.out.println("1.-Buscar y registrar un Libro");
-            System.out.println("2.-Listar libros registrados");
-            System.out.println("3.-Listar autores registrados");
-            System.out.println("4.-Listar autores vivos en un determinado año");
-            System.out.println("5.-Listar libros por idiomas");
-            System.out.println("0.-Salir");
+            System.out.println("\t1.-Buscar y registrar un Libro");
+            System.out.println("\t2.-Listar libros registrados");
+            System.out.println("\t3.-Listar autores registrados");
+            System.out.println("\t4.-Listar autores vivos en un determinado año");
+            System.out.println("\t5.-Listar libros por idiomas");
+            System.out.println("\t0.-Salir");
             var opc = scanner.nextInt();
             scanner.nextLine();
             switch(opc){
@@ -79,7 +77,7 @@ public class Principal {
 
 
     private DatosLibros getDatosLibros(){
-        System.out.println("Ingrese el nombre del libro que desea buscar y registrar");
+        System.out.println("\nIngrese el nombre del libro que desea buscar y registrar");
         var tituloLibro = scanner.nextLine();
         var json = consumoAPI.obtenerDatos(URL_BASE+"?search="+tituloLibro.replace(" ","+"));
         var datosBusqueda = conversor.obtenerDatos(json, Datos.class);
@@ -98,8 +96,9 @@ public class Principal {
     public void buscarYRegistrarLibro(){
         DatosLibros datos = getDatosLibros();
         //System.out.println(datos.autor().get(0).nombre());
+        //System.out.println(datos);
         if(datos!=null){
-            System.out.println("Libro encontrado");
+            System.out.println("\nLibro encontrado");
             Libro libro = new Libro(datos);
             Optional<Autor> nombreAutor = repositoryAutor.findByNombre(datos.autor().get(0).nombre());
 
@@ -124,7 +123,7 @@ public class Principal {
                 System.out.println("El libro "+datos.titulo()+ " ya está registrado.");
             }
         }else {
-            System.out.println("El libro "+datos.titulo()+" no se encontró pruebe con otro");
+            System.out.println("El libro no se encontró pruebe con otro");
         }
     }
 
@@ -155,44 +154,59 @@ public class Principal {
     }
 
     private void listarAutoresVivos() {
+        boolean validInput = false;
+        var year=0;
         System.out.println("\n****** Lista de autores vivos por año  ******\n");
-        System.out.println("Ingrese el año en el que desea saber los autores vivos: ");
-        var year = scanner.nextInt();
+        while(!validInput) {
+            try {
+
+                System.out.println("Ingrese el año en el que desea saber los autores vivos: ");
+                year = scanner.nextInt();
+                validInput=true;
+            }catch(InputMismatchException e){
+                System.out.println("Año no válido. Por favor, ingrese un año válido.");
+                scanner.nextLine(); // Limpiar el buffer del scanner
+            }
+        }
         autoresVivos = repositoryAutor.buscarAutoresPorYear(year);
-        System.out.println("Los Autores registrados vivos en el año " + year + " son los siguientes: ");
-        autoresVivos.forEach(a -> System.out.println("\n" + a.toString()));
+        System.out.println("\nLos Autores registrados vivos en el año " + year + " son los siguientes: ");
+        if(autoresVivos.isEmpty()){
+            System.out.println("Ningún autor vivo registrado en el año "+year);
+        }else{
+            autoresVivos.forEach(a -> System.out.println("\n" + a.toString()));
+        }
 
-
-        System.out.println("\n******************************************");
     }
 
     private void listarLibrosPorIdioma() {
+        boolean validInput = false;
         System.out.println("\n****** Lista de Libros por Idioma  ******\n");
         System.out.println(
                 """
-                Idiomas disponibles:  
+                Idiomas disponibles:
                     es - Español,  de - Alemán,     en - Inglés
                     fr - Francés,  pt - Portugués,  it - Italiano
                """
         );
-        System.out.println("Ingrese el idioma que desea buscar");
-        var idiomaBuscado = scanner.nextLine();
+        while(!validInput) {
+            System.out.println("Ingrese el idioma que desea buscar");
+            var idiomaBuscado = scanner.nextLine();
 
-        try {
+            try {
 
-            librosPorIdioma = repositoryLibro.findByIdiomas(Idioma.fromString(idiomaBuscado));
-            if (!librosPorIdioma.isEmpty()) {
-                System.out.println("Libros registrados publicados en el lenguaje:  " + Idioma.fromString(idiomaBuscado));
-                librosPorIdioma.forEach(l -> System.out.println("\n" + l.toString()));
-            } else {
-                System.out.println("No se han encontrado libros en ese idioma.");
+                librosPorIdioma = repositoryLibro.findByIdiomas(Idioma.fromString(idiomaBuscado));
+                if (!librosPorIdioma.isEmpty()) {
+                    System.out.println("\nLibros registrados publicados en el lenguaje:  " + Idioma.fromString(idiomaBuscado));
+                    librosPorIdioma.forEach(l -> System.out.println("\n" + l.toString()));
+                    validInput=true;
+                } else {
+                    System.out.println("\nNo se han encontrado libros en ese idioma.");
+                    validInput=true;
+                }
+            } catch (Exception e) {
+                System.out.println("\nError al escoger idioma, escoga una opción que aprezca en el menú. Vuelva a intentarlo");
             }
-        } catch (Exception e) {
-            System.out.println("Error");
         }
-
-
-        System.out.println("\n******************************************");
     }
 
 

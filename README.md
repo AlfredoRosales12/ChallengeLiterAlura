@@ -1,4 +1,4 @@
-# Encriptador de Texto
+# ChallengeLiterAlura
 ![Static Badge](https://img.shields.io/badge/release_date-january-green)
 ![Static Badge](https://img.shields.io/badge/Status-Under_review-purple)
 
